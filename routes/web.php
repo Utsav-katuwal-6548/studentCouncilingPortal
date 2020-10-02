@@ -17,11 +17,9 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-
 Route::get('/login',function(){
     return view('auth.login');
 });
-
 
 Route::get('auth/google', 'LoginController@redirectToGoogle');
 Route::get('google/callback', 'LoginController@handleGoogleCallback');
@@ -58,6 +56,7 @@ Route::prefix('student')->group(function () {
         Route::get('/dashboard','StudentController@dashboard');
         Route::get('/allCourses','StudentController@viewAllCourses');
         Route::get('/myAppointment','StudentController@myAppointments');
+        Route::post('/cancel/{id}','StudentController@cancelAppointment');
         Route::get('/logout','LoginController@logout');
 });
 
@@ -75,8 +74,8 @@ Route::prefix('teacher')->group(function () {
     Route::post('/accept/{id}','TeacherController@acceptAppointment');
     Route::post('/decline/{id}','TeacherController@declineAppointment');
     Route::post('/updateAppointmentTime/{id}','TeacherController@updateTime');
+    Route::get('/changeTime','TeacherController@changeTimeForm');
+    Route::post('/updateTime','TeacherController@updateTimeAvailable');
     Route::get('/logout','LoginController@logout');
-
-
 });
 });

@@ -102,6 +102,22 @@ class TeacherController extends Controller
         $app->date = $request['date'];
         $app->time = $request['time'];
         $app->update();
+
+        $sender = User::where('user_id','=',$app->student_id)->first();
+        $teacher = User::where('user_id','=',$app->teacher_id)->first();
+
+    
+        $to_name = $sender->first_name;
+        $to_email = $sender->email;
+        $tchMessage = $app->change_time_message;
+        $data = array('name'=>$to_name, "body" => $teacher->full_name,"subject" => $app->course_id,'date'=>$app->date,"time"=>$app->time,"tchMessage"=>$tchMessage);
+        Mail::send('emails.timeChange', $data, function($message) use ($to_name, $to_email) {
+            $message->to($to_email, $to_name)
+                    ->subject('Appointment Time Rescheduled');
+            $message->from('aitmaster2020@gmail.com','AIT Master');
+        });
+
+
         return back()->with('success','Appointment Time Changed!');
     }
 
@@ -121,6 +137,55 @@ class TeacherController extends Controller
 
         }
 
+
+    }
+
+
+    public function changeTimeForm(){
+        $title = "Change Available Time";
+        $time = DB::table('teacher_time')
+                ->select('time as t')
+                ->where('teacher_id','=',Session::get('teacher')->user_id)
+                ->first();
+    
+        $time1 = 'asd';
+       
+        if($time){
+            $time1 = $time->t;
+        }
+        else{
+
+            $time1 = '9:00 AM';
+
+        }
+   
+        return view('/teacher/changeTime',compact('title','time1'));
+            
+
+
+    }
+
+    public function updateTimeAvailable(Request $request){
+        $time = DB::table('teacher_time')
+        ->select('*')
+        ->where('teacher_id','=',Session::get('teacher')->user_id)
+        ->first();
+
+        if($time){
+            DB::table('teacher_time')
+            ->where('teacher_time_id', $time->teacher_time_id)
+            ->update(array('time' => $request['time']));
+
+        }
+        else{
+
+            DB::table('teacher_time')->insert(
+                array('teacher_id' => Session::get('teacher')->user_id, 'time' => $request['time'])
+            );
+
+        }
+
+        return back()->with('success','Teacher Time Updated!');
 
     }
 }

@@ -31,6 +31,8 @@
                         <td> <span class="badge badge-danger">Rejected</span></td>
                         @elseif($a->status == 3)
                         <td> <span class="badge badge-primary">Completed</span></td>
+                        @elseif($a->status == 4)
+                        <td> <span class="badge badge-secondary">Cancled</span></td>
                 @endif
                 <td>
                     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-centered-{{$a->appointment_id}}">

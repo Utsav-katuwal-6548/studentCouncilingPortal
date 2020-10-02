@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 01, 2020 at 03:05 PM
--- Server version: 10.4.11-MariaDB
--- PHP Version: 7.2.31
+-- Generation Time: Oct 02, 2020 at 11:24 AM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.2.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -54,28 +54,21 @@ CREATE TABLE `appointment` (
   `course_id` varchar(20) DEFAULT NULL,
   `message` varchar(150) DEFAULT NULL,
   `date` date DEFAULT NULL,
-  `time` time DEFAULT NULL,
+  `time` varchar(50) DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   `appointment_id` int(11) NOT NULL,
   `teacher_message` longtext DEFAULT NULL,
-  `change_time_message` longtext DEFAULT NULL
+  `change_time_message` longtext DEFAULT NULL,
+  `student_reject_message` longtext DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `appointment`
 --
 
-INSERT INTO `appointment` (`student_id`, `teacher_id`, `course_id`, `message`, `date`, `time`, `status`, `appointment_id`, `teacher_message`, `change_time_message`) VALUES
-('6548', 'teacher_josepht', 'SPC3039-D20', 'asdasdas', '2020-09-25', '14:00:00', 0, 4, 'Sorry i am busy on the day. So can we change the date.', NULL),
-('6548', 'teacher_josepht', 'SPC3039-D20', 'Hello I am utsav katuwal. I have problems is ....', '2020-09-30', '17:30:00', 3, 5, 'adadasd', NULL),
-('6548', 'teacher_josepht', 'SPC3039-D20', 'This is test message. I want to book appointment.', '2020-09-26', '23:00:00', 2, 6, NULL, 'sorry'),
-('6548', 'teacher_josepht', 'SPC3039-D20', 'asdadsdsad', '2020-10-08', '10:00:00', 2, 7, 'sorry i am bg this day. please change the date and request again.', NULL),
-('6548', 'teacher_josepht', 'SPC3039-D20', 'Dignissimos do simil', '2023-06-06', '22:00:00', 0, 8, NULL, NULL),
-('6548', 'teacher_josepht', 'SPC3039-D20', NULL, '2021-02-18', '19:00:00', 0, 9, NULL, NULL),
-('6548', 'teacher_josepht', 'SPC3039-D20', NULL, '2021-02-12', '12:30:00', 0, 10, NULL, NULL),
-('6548', 'teacher_josepht', 'SPC3039-D20', 'Hello sir i am facing problem........ this is test email.', '2021-03-04', '19:00:00', 0, 11, NULL, NULL),
-('6548', 'teacher_josepht', 'SPC3039-D20', 'Hello I want to book this appointment', '2021-06-01', '19:00:00', 0, 12, NULL, NULL),
-('6423', 'teacher_josepht', 'SPC3039-D20', 'Hello appointment book test.', '2021-05-20', '12:30:00', 0, 13, NULL, NULL);
+INSERT INTO `appointment` (`student_id`, `teacher_id`, `course_id`, `message`, `date`, `time`, `status`, `appointment_id`, `teacher_message`, `change_time_message`, `student_reject_message`) VALUES
+('6548', 'teacher_josepht', 'SPC3039-D20', 'Hello', '2020-10-09', '7:00 PM', 4, 1, NULL, NULL, 'uyugfkjgfjkvhvghgfjhgjg jgfjkglg g'),
+('6548', 'teacher_josepht', 'SPC3039-D20', 'kjbjhb', '2020-10-16', '17:30', 1, 2, 'jjj', 'sorry . time change', NULL);
 
 -- --------------------------------------------------------
 
@@ -416,6 +409,25 @@ INSERT INTO `sections` (`section_id`, `course_id`, `integration_id`, `name`, `st
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `teacher_time`
+--
+
+CREATE TABLE `teacher_time` (
+  `teacher_time_id` int(11) NOT NULL,
+  `teacher_id` varchar(50) DEFAULT NULL,
+  `time` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `teacher_time`
+--
+
+INSERT INTO `teacher_time` (`teacher_time_id`, `teacher_id`, `time`) VALUES
+(1, 'teacher_josepht', '7:00 PM');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -441,7 +453,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`user_id`, `integration_id`, `authentication_provider_id`, `login_id`, `password`, `first_name`, `last_name`, `full_name`, `sortable_name`, `short_name`, `email`, `status`) VALUES
 ('6423', '', '3', '6423@ait.nsw.edu.au', '', 'Phu', 'Thuc Khon', 'Phu Thuc Khon', 'Thuc Khon, Phu', '', '6423@ait.nsw.edu.au', 'active'),
 ('6548', '', '3', '6548@ait.nsw.edu.au', '', 'Katuwal', 'Utsav', 'Katuwal Utsav', 'Utsav, Katuwal', '', '6548@ait.nsw.edu.au', 'active'),
-('teacher_josepht', '', '3', 'joseph.tagudin@ait.nsw.edu.au', '', 'Joseph', 'Tagudin', 'Joseph Tagudin', 'Tagudin, Joseph', 'Joseph Tagudin', 'joseph.tagudin@ait.nsw.edu.au', 'active'),
+('teacher_josepht', '', '3', 'joseph.tagudin@ait.nsw.edu.au', '', 'Joseph', 'Tagudin', 'Joseph Tagudin', 'Tagudin, Joseph', 'Joseph Tagudin', 'katuwalutsab@gmail.com', 'active'),
 ('teacher_kriss', '', '3', 'kriss.mahatumaratana@ait.nsw.edu.au', '', 'Kriss', 'Mahatumaratana', 'Kriss Mahatumaratana', 'Mahatumaratana, Kriss', 'Kriss, Mahatumaratana', 'kriss.mahatumaratana@ait.nsw.edu.au', 'active');
 
 --
@@ -473,6 +485,12 @@ ALTER TABLE `sections`
   ADD PRIMARY KEY (`section_id`);
 
 --
+-- Indexes for table `teacher_time`
+--
+ALTER TABLE `teacher_time`
+  ADD PRIMARY KEY (`teacher_time_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -492,7 +510,13 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `appointment`
 --
 ALTER TABLE `appointment`
-  MODIFY `appointment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `appointment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `teacher_time`
+--
+ALTER TABLE `teacher_time`
+  MODIFY `teacher_time_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

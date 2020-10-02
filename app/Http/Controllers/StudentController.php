@@ -97,8 +97,25 @@ class StudentController extends Controller
 
         $title = "Select Time";
         $teacher = User::where('user_id','=',$teacherId)->first();
-    
-        return view('student.selectTime',compact('title','courseId','teacherId','teacher'));
+
+        $avTime = DB::table('teacher_time')
+        ->select('*')
+        ->where('teacher_id','=',$teacherId)
+        ->first();
+
+
+        if($avTime){
+            $time1 = $avTime->time;
+        }
+        else{
+
+            $time1 = '9:00 AM';
+
+        }
+
+     
+
+        return view('student.selectTime',compact('title','courseId','teacherId','teacher','time1'));
     }
 
     public function checkTeacherDate($date,$teacherId){
@@ -171,5 +188,39 @@ class StudentController extends Controller
         $title = "My Appointment";
         $app = Appointment::with('teacher')->where('student_id','=',Session::get('student')->user_id)->get();
         return view('student/appointment',compact('title','app'));
+    }
+
+    public function cancelAppointment(Request $request,$id){
+
+
+        $app = Appointment::find($id);
+        $app->status = 4;
+        $app->student_reject_message = $request['student_reject_message'];
+
+        $app->update();
+
+       
+        $sender = User::where('user_id','=',$app->student_id)->first();
+        $teacher = User::where('user_id','=',$app->teacher_id)->first();
+      
+
+        $to_name = $sender->first_name;
+        $to_email = $sender->email;
+
+        $teacher_name = $teacher->first_name;
+        $teacher_email = $teacher->email;
+
+    
+        $data1 = array('name'=>$teacher->first_name, "body" => $sender->full_name,"subject" => $app->course_id,'date'=>$app->date,"time"=>$app->time,'msg'=>$app->student_reject_message);
+            
+        Mail::send('emails.cancel', $data1, function($message) use ($teacher_name, $teacher_email) {
+            $message->to($teacher_email, $teacher_name)
+                    ->subject('Appointment Canceled By Student');
+            $message->from('aitmaster2020@gmail.com','AIT Master');
+        });
+
+        return back()->with('success','Appointment Cancled!');
+
+
     }
 }

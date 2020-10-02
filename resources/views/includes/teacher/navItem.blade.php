@@ -20,7 +20,11 @@
     <li @if($title == 'My Appointment' ) class="active" @endif>
         <a href="/teacher/myAppointment" >All Appointments</a>
     </li>
-    
-   
     </ul>
     </li>
+
+    <li @if($title == 'Change Available Time') class="active" @endif>
+        <a href="/teacher/changeTime"  >
+            <i class="fas fa-clock"></i>Change Available Time</a>
+    </li>
+    
